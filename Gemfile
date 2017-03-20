@@ -5,7 +5,9 @@ ruby '2.3.3'
 gem 'sinatra'
 gem 'rack'
 gem 'activesupport'
-
+gem 'activerecord'
+gem 'sinatra-activerecord'
+gem 'pg'
 
 group :development do
   gem 'pry'
