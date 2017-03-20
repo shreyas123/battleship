@@ -2,6 +2,8 @@ require "sinatra"
 require "rubygems"
 require "bundler"
 require "bundler/setup"
+require "sinatra/activerecord"
+
 
 
 Bundler.require(:default)                   # load all the default gems
