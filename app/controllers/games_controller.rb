@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
 
-  get '/games' do
+  get '/' do
+    json Game.all.as_json
   end
 end
