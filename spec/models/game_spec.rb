@@ -8,8 +8,8 @@ RSpec.describe Game, type: :model do
   end
 
   describe 'validations' do
-    it { is_expected.to validate_presence_of(:player1) }
-    it { is_expected.to validate_presence_of(:player2) }
+    it { is_expected.to validate_presence_of(:player1_id) }
+    it { is_expected.to validate_presence_of(:player2_id) }
   end
 
   describe '#as_json' do

@@ -3,7 +3,7 @@ class Game < ActiveRecord::Base
   belongs_to :player1, class_name: 'Player'
   belongs_to :player2, class_name: 'Player'
 
-  validates :player1, :player2, presence: true
+  validates :player1_id, :player2_id, presence: true
 
   before_create :set_started_at
 
