@@ -35,6 +35,9 @@ RSpec.configure do |config|
   config.include Rack::Test::Methods
   config.include FactoryGirl::Syntax::Methods
 
+  config.include(Shoulda::Matchers::ActiveModel, type: :model)
+  config.include(Shoulda::Matchers::ActiveRecord, type: :model)
+
   config.before(:suite) do
     FactoryGirl.find_definitions
   end
