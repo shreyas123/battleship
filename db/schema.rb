@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170321175315) do
+ActiveRecord::Schema.define(version: 20170321192123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,14 +19,45 @@ ActiveRecord::Schema.define(version: 20170321175315) do
     t.datetime "started_at"
     t.boolean  "paused",     default: false
     t.boolean  "finished",   default: false
+    t.integer  "player1_id"
+    t.integer  "player2_id"
+    t.integer  "move",       default: 1
+    t.integer  "won_by",     default: 0
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.index ["player1_id"], name: "index_games_on_player1_id", using: :btree
+    t.index ["player2_id"], name: "index_games_on_player2_id", using: :btree
+  end
+
+  create_table "moves", force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "ship_sunk_id"
+    t.integer "player_number"
+    t.boolean "hit",           default: false
+    t.index ["game_id"], name: "index_moves_on_game_id", using: :btree
+    t.index ["ship_sunk_id"], name: "index_moves_on_ship_sunk_id", using: :btree
+  end
+
+  create_table "placements", force: :cascade do |t|
+    t.integer "game_id"
+    t.integer "ship_id"
+    t.integer "player_number"
+    t.boolean "vertical",             default: false
+    t.text    "vertical_placement"
+    t.integer "horizontal_placement"
+    t.index ["game_id"], name: "index_placements_on_game_id", using: :btree
+    t.index ["ship_id"], name: "index_placements_on_ship_id", using: :btree
   end
 
   create_table "players", force: :cascade do |t|
     t.datetime "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "ships", force: :cascade do |t|
+    t.string  "name"
+    t.integer "length"
   end
 
 end
