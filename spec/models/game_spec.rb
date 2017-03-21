@@ -10,7 +10,6 @@ RSpec.describe Game, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:player1) }
     it { is_expected.to validate_presence_of(:player2) }
-    it { is_expected.to validate_presence_of(:started_at) }
   end
 
   describe '#as_json' do
@@ -18,6 +17,19 @@ RSpec.describe Game, type: :model do
     it 'constains extra data' do
       expect(game.as_json.keys).to include('player1')
       expect(game.as_json.keys).to include('player2')
+    end
+  end
+
+  describe 'callbacks' do
+    describe 'before_create' do
+      describe '#add_started_at' do
+        it 'adds started_at as current time' do
+          game = build(:game)
+          game.started_at = nil
+          game.save
+          expect( game.reload.started_at ).to_not be_nil
+        end
+      end
     end
   end
 end
