@@ -21,6 +21,7 @@ ENV['RACK_ENV'] = 'test'
 require "./config/environment"
 require 'rspec'
 require 'pry'
+require 'database_cleaner'
 
 
 Shoulda::Matchers.configure do |config|
@@ -36,6 +37,18 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     FactoryGirl.find_definitions
+  end
+
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation, { except: ['plans'] }
+  end
+
+  config.before(:each) do |example|
+    DatabaseCleaner.start
+  end
+
+  config.after(:each) do |example|
+    DatabaseCleaner.clean
   end
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
