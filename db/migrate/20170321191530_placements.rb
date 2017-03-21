@@ -8,5 +8,7 @@ class Placements < ActiveRecord::Migration[5.0]
       t.text :vertical_placement
       t.integer :horizontal_placement
     end
+
+    add_index :placements, [:game_id, :ship_id], unique: true
   end
 end

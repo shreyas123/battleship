@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20170321192123) do
     t.boolean "vertical",             default: false
     t.text    "vertical_placement"
     t.integer "horizontal_placement"
+    t.index ["game_id", "ship_id"], name: "index_placements_on_game_id_and_ship_id", unique: true, using: :btree
     t.index ["game_id"], name: "index_placements_on_game_id", using: :btree
     t.index ["ship_id"], name: "index_placements_on_ship_id", using: :btree
   end
