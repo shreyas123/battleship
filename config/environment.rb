@@ -1,4 +1,5 @@
 require "sinatra"
+require "sinatra/json"
 require "rubygems"
 require "bundler"
 require "bundler/setup"
