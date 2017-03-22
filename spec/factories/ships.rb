@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :ship do
-    name { 'Carrier' }
+    sequence(:name) { |n| "Carrier#{n}" }
     length { 5 }
   end
 end
