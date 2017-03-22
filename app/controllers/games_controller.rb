@@ -1,7 +1,7 @@
 class GamesController < ApplicationController
 
   get '/' do
-    json Game.all.as_json
+    json Game.includes(:player1, :player2).all.as_json
   end
 
   post '/' do
