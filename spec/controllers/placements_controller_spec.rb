@@ -47,4 +47,40 @@ RSpec.describe PlacementsController do
       expect(last_response.status).to eq 200
     end
   end
+
+  describe 'PUT /placements/games/:game_id/:placement_id' do
+    let!(:game) { create :game }
+    let!(:ship) { create(:ship) }
+    let!(:placement) { create(:placement, game: game, ship: ship, vertical_placement: 'A') }
+
+    subject(:request) { put "/games/#{game.id}/#{placement.id}", placement: placement_params }
+    let(:placement_params) { { player_number: 1, vertical_placement: 'B', horizontal_placement: '2' } }
+
+    it 'creates a placement' do
+      expect{ request }.to change{ placement.reload.vertical_placement }.to 'B'
+    end
+
+    context 'when placement id does not exist' do
+      subject(:request) { put "/games/#{game.id}/-1", placement: placement_params }
+      it 'returns error' do
+        request
+
+        expect(JSON.parse(last_response.body)).to eq({"error" => 'Placement does not exist'})
+        expect(last_response.status).to eq 400
+      end
+    end
+  end
+
+  describe 'DELETE /placements/games/:game_id/:placement_id' do
+    let!(:game) { create :game }
+    let!(:ship) { create(:ship) }
+    let!(:placement) { create(:placement, game: game, ship: ship, vertical_placement: 'A') }
+
+    subject(:request) { delete "/games/#{game.id}/#{placement.id}", placement: placement_params }
+    let(:placement_params) { { player_number: 1, vertical_placement: 'B', horizontal_placement: '2' } }
+
+    it 'creates a placement' do
+      expect{ request }.to change{ game.placements.count }.by -1
+    end
+  end
 end

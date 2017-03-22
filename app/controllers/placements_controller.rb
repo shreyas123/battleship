@@ -2,8 +2,13 @@ class PlacementsController < ApplicationController
 
   helpers do
     def game(game_id)
-      @game = Game.find_by(id: params[:game_id])
+      @game ||= Game.find_by(id: game_id)
       halt 400, json({error: 'Game does not exist'}) unless @game
+    end
+
+    def placement(id)
+      @placement ||= @game.placements.find_by(id: id)
+      halt 400, json({error: 'Placement does not exist'}) unless @placement
     end
   end
 
@@ -19,6 +24,28 @@ class PlacementsController < ApplicationController
       json placement
     else
       halt 422, json(placement.errors)
+    end
+  end
+
+  put '/games/:game_id/:id' do
+    game(params[:game_id])
+    placement(params[:id])
+
+    if @placement.update_attributes(params[:placement])
+      json @placement
+    else
+      halt 422, json(@placement.errors)
+    end
+  end
+
+  delete '/games/:game_id/:id' do
+    game(params[:game_id])
+    placement(params[:id])
+
+    if @placement.destroy
+      json({ success: true })
+    else
+      halt 422, json(@placement.errors)
     end
   end
 end
