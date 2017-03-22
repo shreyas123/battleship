@@ -3,6 +3,8 @@ class Game < ActiveRecord::Base
   belongs_to :player1, class_name: 'Player'
   belongs_to :player2, class_name: 'Player'
 
+  has_many :placements, dependent: :destroy
+
   validates :player1_id, :player2_id, presence: true
 
   before_create :set_started_at
