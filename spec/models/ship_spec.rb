@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe Ship, type: :model do
+
+  describe 'associations' do
+    it { is_expected.to have_many(:placements).dependent(:destroy) }
+  end
+
   describe 'validations' do
     it { is_expected.to validate_uniqueness_of(:name) }
     it { is_expected.to validate_presence_of(:name) }
