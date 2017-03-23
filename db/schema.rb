@@ -31,13 +31,11 @@ ActiveRecord::Schema.define(version: 20170321192123) do
 
   create_table "moves", force: :cascade do |t|
     t.integer "game_id"
-    t.integer "ship_sunk_id"
     t.integer "player_number"
     t.string  "vertical_move"
     t.integer "horizontal_move"
     t.boolean "hit",             default: false
     t.index ["game_id"], name: "index_moves_on_game_id", using: :btree
-    t.index ["ship_sunk_id"], name: "index_moves_on_ship_sunk_id", using: :btree
   end
 
   create_table "placements", force: :cascade do |t|
@@ -47,8 +45,10 @@ ActiveRecord::Schema.define(version: 20170321192123) do
     t.boolean "vertical",             default: false
     t.text    "vertical_placement"
     t.integer "horizontal_placement"
-    t.index ["game_id", "ship_id"], name: "index_placements_on_game_id_and_ship_id", unique: true, using: :btree
+    t.index ["game_id", "ship_id", "player_number"], name: "index_placements_on_game_id_and_ship_id_and_player_number", using: :btree
+    t.index ["game_id", "ship_id"], name: "index_placements_on_game_id_and_ship_id", using: :btree
     t.index ["game_id"], name: "index_placements_on_game_id", using: :btree
+    t.index ["player_number"], name: "index_placements_on_player_number", using: :btree
     t.index ["ship_id"], name: "index_placements_on_ship_id", using: :btree
   end
 
