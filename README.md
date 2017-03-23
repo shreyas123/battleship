@@ -1,4 +1,4 @@
-BattleShip Game API [![Code Climate](https://codeclimate.com/github/shreyas123/battleship/badges/gpa.svg)](https://codeclimate.com/github/shreyas123/battleship)
+BattleShip Game API [![Code Climate](https://codeclimate.com/github/shreyas123/battleship/badges/gpa.svg)](https://codeclimate.com/github/shreyas123/battleship) [![Test Coverage](https://codeclimate.com/github/shreyas123/battleship/badges/coverage.svg)](https://codeclimate.com/github/shreyas123/battleship/coverage)
 ===========================
 
 This is a sample Sinatra app which provides API to create and play game via API.
