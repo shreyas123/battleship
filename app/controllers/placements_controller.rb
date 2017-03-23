@@ -1,11 +1,8 @@
 class PlacementsController < ApplicationController
 
-  helpers do
-    def game(game_id)
-      @game ||= Game.find_by(id: game_id)
-      halt 400, json({error: 'Game does not exist'}) unless @game
-    end
+  helpers ApplicationHelper
 
+  helpers do
     def placement(id)
       @placement ||= @game.placements.find_by(id: id)
       halt 400, json({error: 'Placement does not exist'}) unless @placement
