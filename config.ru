@@ -4,5 +4,6 @@ map('/games') { run GamesController }
 map('/players') { run PlayersController }
 map('/ships') { run ShipsController }
 map('/placements') { run PlacementsController }
+map('/moves') { run MovesController }
 
 run ApplicationController
