@@ -7,13 +7,14 @@ class Placement < ActiveRecord::Base
   HORIZONTAL_NAMES = (1..10).to_a
 
   validates :game_id, :ship_id, :player_number, :vertical_placement, :horizontal_placement, presence: true
-  validates :ship_id, uniqueness: { scope: :game_id }
+  validates :ship_id, uniqueness: { scope: [:game_id, :player_number] }
   validates :player_number, inclusion: { in: [1,2] }, uniqueness: { scope: [:vertical_placement, :horizontal_placement, :game_id] }
   validates :vertical_placement, inclusion: { in: VERTICAL_NAMES }
   validates :horizontal_placement, inclusion: { in: HORIZONTAL_NAMES }
 
   validate :overlap
   validate :overbound
+  validate :game_started
 
   scope :for_player_1, -> { where(player_number: 1) }
   scope :for_player_2, -> { where(player_number: 2) }
@@ -26,6 +27,10 @@ class Placement < ActiveRecord::Base
         return false
       end
     end
+  end
+
+  def game_started
+    errors.add(:game_id, 'The placement cannot be done as game has been started') if game.started_at
   end
 
   def overbound

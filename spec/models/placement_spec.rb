@@ -7,7 +7,7 @@ RSpec.describe Placement, type: :model do
   end
 
   describe 'validations' do
-    it { is_expected.to validate_uniqueness_of(:ship_id).scoped_to(:game_id) }
+    it { is_expected.to validate_uniqueness_of(:ship_id).scoped_to([:game_id, :player_number]) }
     it { is_expected.to validate_presence_of(:game_id) }
     it { is_expected.to validate_presence_of(:ship_id) }
     it { is_expected.to validate_presence_of(:player_number) }
@@ -37,6 +37,16 @@ RSpec.describe Placement, type: :model do
 
         placement = build(:placement, vertical_placement: 'D', horizontal_placement: '7', game: game)
         expect(placement.valid?).to be_falsy
+      end
+    end
+
+    describe '#can_place' do
+      it 'throws error if game has started' do
+        game = create(:game, started_at: Time.now)
+
+        placement = build(:placement, game: game)
+        expect(placement.valid?).to be_falsy
+        expect(placement.errors.messages).to eql({game_id: ["The placement cannot be done as game has been started"]})
       end
     end
   end
