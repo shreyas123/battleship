@@ -10,7 +10,7 @@ RSpec.describe MovesController do
     let!(:ship) { create :ship }
     let!(:placement) { create :placement, ship: ship, game: game, player_number: 2,
                                              horizontal_placement: '1', vertical_placement: "A" }
-        let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 1,
+    let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 1,
                                              horizontal_placement: '1', vertical_placement: "A" }
     let!(:move) { create :move, game: game }
 
@@ -35,21 +35,19 @@ RSpec.describe MovesController do
     end
   end
 
-  describe 'POST /games' do
-    let(:player1) { create(:player) }
-    let(:player2) { create(:player) }
-    subject(:request) { post '/', game: game }
-    let(:game) { { player1_id: player1, player2_id: player2 } }
+  describe 'POST /moves/games/:game_id' do
+    let!(:game) { create :game }
+    let!(:ship) { create(:ship) }
+    let!(:placement) { create :placement, ship: ship, game: game, player_number: 1,
+                                             horizontal_placement: '1', vertical_placement: "A" }
+    let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 2,
+                                             horizontal_placement: '1', vertical_placement: "A" }
 
-    it 'creates a game' do
-      expect{ request }.to change{ Game.count }.by 1
-    end
+    subject(:request) { post "/games/#{game.id}", moves: moves }
+    let(:moves) { { player_number: 1, vertical_move: 'A', horizontal_move: '2' } }
 
-    it 'returns all games' do
-      request
-
-      expect(last_response.body).to eq("#{Game.last.to_json}")
-      expect(last_response.status).to eq 200
+    it 'creates a move for player 1' do
+      expect{ request }.to change{ game.reload.moves.count }.by 1
     end
   end
 end
