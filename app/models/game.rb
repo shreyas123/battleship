@@ -10,7 +10,7 @@ class Game < ActiveRecord::Base
 
   def serializable_hash(options = {})
     super(
-        include: [:player1, :player2]
+        (options || {}).merge(include: [:player1, :player2])
       )
   end
 

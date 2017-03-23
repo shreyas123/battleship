@@ -17,6 +17,12 @@ class Move < ActiveRecord::Base
   after_commit :set_won, :toggle_game_move
   after_commit :set_started_at, if: lambda { game.started_at.nil? }
 
+  def serializable_hash(options = {})
+    super(
+        (options || {}).merge(include: [:game])
+      )
+  end
+
   private
     def toggle_game_move
       game.toggle_move(player_number)
