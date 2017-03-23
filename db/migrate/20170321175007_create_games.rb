@@ -7,7 +7,7 @@ class CreateGames < ActiveRecord::Migration[5.0]
       t.references :player1
       t.references :player2
       t.integer :move, default: 1
-      t.integer :won_by, default: 0
+      t.integer :won_by
       t.timestamps
     end
   end

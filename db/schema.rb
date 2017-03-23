@@ -22,7 +22,7 @@ ActiveRecord::Schema.define(version: 20170321192123) do
     t.integer  "player1_id"
     t.integer  "player2_id"
     t.integer  "move",       default: 1
-    t.integer  "won_by",     default: 0
+    t.integer  "won_by"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.index ["player1_id"], name: "index_games_on_player1_id", using: :btree
