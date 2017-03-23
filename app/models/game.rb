@@ -4,6 +4,7 @@ class Game < ActiveRecord::Base
   belongs_to :player2, class_name: 'Player'
 
   has_many :placements, dependent: :destroy
+  has_many :moves, dependent: :destroy
 
   validates :player1_id, :player2_id, presence: true
 
