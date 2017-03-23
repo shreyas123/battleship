@@ -10,13 +10,25 @@ class Move < ActiveRecord::Base
   validates :vertical_move, presence: true, inclusion: { in: Placement::VERTICAL_NAMES }, uniqueness: { scope: [:horizontal_move, :game_id] }
   validates :horizontal_move, presence: true, inclusion: { in: Placement::HORIZONTAL_NAMES }, uniqueness: { scope: [:vertical_move, :game_id] }
 
-  validate :check_placements
+  validate :validate_placements
+  validate :validate_game_won
 
   before_save :check_hit
-  after_commit :set_won
+  after_commit :set_won, :toggle_game_move
   after_commit :set_started_at, if: lambda { game.started_at.nil? }
 
   private
+    def toggle_game_move
+      game.toggle_move(player_number)
+      true
+    end
+
+    def validate_game_won
+      if game && !game.won_by.nil?
+        errors.add(:player_number, "Game is already won by player #{game.won_by}")
+      end
+    end
+
     def check_hit
       self.hit = false
       if player_number == 2
@@ -24,13 +36,14 @@ class Move < ActiveRecord::Base
       else
         self.hit = placements.for_player_2.any? { |placement| placement.placement_board.include?([vertical_move, horizontal_move]) }
       end
+      true
     end
 
     def set_won
       game.set_won(player_number)
     end
 
-    def check_placements
+    def validate_placements
       ship_length = Ship.count
       player = []
       player << "player 1" if placements.for_player_1.count != ship_length

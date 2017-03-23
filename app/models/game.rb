@@ -14,6 +14,11 @@ class Game < ActiveRecord::Base
       )
   end
 
+  def toggle_move(player_number)
+    self.move = (player_number == 1 ? 2 : 1)
+    self.save!
+  end
+
   def set_won(current_player)
     if Ship.sum(:length) == moves.where(player_number: current_player).count(:hit)
       self.won_by = current_player

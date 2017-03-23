@@ -30,6 +30,15 @@ RSpec.describe Move, type: :model do
         expect(move.valid?).to be_truthy
       end
     end
+
+    describe 'validate_game_won' do
+      it 'throws error if game is won by someone' do
+        game = create :game, won_by: 1
+        move = build(:move, game: game)
+        expect(move.valid?).to be_falsy
+        expect(move.errors.messages).to eql({player_number: ["Game is already won by player 1"]})
+      end
+    end
   end
 
   describe 'callbacks' do
@@ -56,6 +65,18 @@ RSpec.describe Move, type: :model do
     end
 
     describe "after_commit" do
+      describe 'toggle_game_move' do
+        let(:game) { create :game }
+        let(:ship) { create :ship }
+        let!(:placement) { create :placement, ship: ship, game: game, player_number: 1 }
+        let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 2  }
+
+        it 'toggles game move between 1 and 2' do
+          move = build(:move, game: game, player_number: 1)
+          expect{ move.save }.to change{ game.reload.move }
+        end
+      end
+
       describe "game_won" do
         let(:game) { create :game }
         let(:ship) { create :ship }
