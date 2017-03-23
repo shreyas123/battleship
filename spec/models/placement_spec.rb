@@ -10,6 +10,7 @@ RSpec.describe Placement, type: :model do
     it { is_expected.to validate_uniqueness_of(:ship_id).scoped_to(:game_id) }
     it { is_expected.to validate_presence_of(:game_id) }
     it { is_expected.to validate_presence_of(:ship_id) }
+    it { is_expected.to validate_presence_of(:player_number) }
     it { is_expected.to validate_presence_of(:horizontal_placement) }
     it { is_expected.to validate_presence_of(:vertical_placement) }
     it { is_expected.to validate_inclusion_of(:player_number).in_array([1, 2]) }
