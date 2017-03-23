@@ -15,6 +15,9 @@ class Placement < ActiveRecord::Base
   validate :overlap
   validate :overbound
 
+  scope :for_player_1, -> { where(player_number: 1) }
+  scope :for_player_2, -> { where(player_number: 2) }
+
   def overlap
     placements = Placement.where(game: self.game, player_number: self.player_number)
     placements.each do |placement|

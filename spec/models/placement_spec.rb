@@ -41,6 +41,20 @@ RSpec.describe Placement, type: :model do
     end
   end
 
+  describe 'scopes' do
+    describe '.for_player_*' do
+      let!(:placement1) { create :placement, player_number: 1 }
+      let!(:placement2) { create :placement, player_number: 2}
+      let!(:placement3) { create :placement, player_number: 2 }
+      let!(:placement4) { create :placement, player_number: 1 }
+
+      it 'returns all placements of player 1 or 2' do
+        expect(Placement.for_player_1.to_a).to match_array([placement1, placement4])
+        expect(Placement.for_player_2.to_a).to match_array([placement2, placement3])
+      end
+    end
+  end
+
   describe 'placement_board' do
     it 'creates an array of board' do
       placement = build(:placement, vertical_placement: 'A', horizontal_placement: '2')
