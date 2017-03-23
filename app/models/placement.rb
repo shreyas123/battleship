@@ -30,7 +30,9 @@ class Placement < ActiveRecord::Base
   end
 
   def game_started
-    errors.add(:game_id, 'The placement cannot be done as game has been started') if game.started_at
+    if game && game.started_at
+      errors.add(:game_id, 'The placement cannot be done as game has been started')
+    end
   end
 
   def overbound

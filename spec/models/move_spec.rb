@@ -18,7 +18,7 @@ RSpec.describe Move, type: :model do
       let(:game) { create :game }
       let!(:ship) { create :ship }
       it 'throw error if placement is not complete' do
-        move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 1)
+        move = build(:move, game: game, player_number: 1, vertical_move: 'A', horizontal_move: 1)
         expect(move.valid?).to be_falsy
         expect(move.errors.messages).to eql({player_number: ["Game cannot start as player 1 and player 2 has not placed all the ships."]})
 
@@ -51,9 +51,8 @@ RSpec.describe Move, type: :model do
         let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 2,
                                              horizontal_placement: '1', vertical_placement: "A" }
         it 'sets hit if it hits' do
-          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 1)
+          move = build(:move, game: game, player_number: 1, vertical_move: 'A', horizontal_move: 1)
           expect{ move.save }.to change{ move.hit }.to true
-          move.destroy
 
           move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 2)
           expect{ move.save }.to change{ move.hit }.to true
@@ -79,26 +78,26 @@ RSpec.describe Move, type: :model do
 
       describe "game_won" do
         let(:game) { create :game }
-        let(:ship) { create :ship }
-        let!(:placement) { create :placement, ship: ship, game: game, player_number: 1,
+        let(:ship) { create :ship, length: 3 }
+        let!(:placement) { create :placement, ship: ship, game: game, player_number: 2,
                                              horizontal_placement: '1', vertical_placement: "A" }
-        let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 2,
+        let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 1,
                                              horizontal_placement: '1', vertical_placement: "A" }
         it 'sets hit if it hits' do
+          move = build(:move, game: game, player_number: 1, vertical_move: 'A', horizontal_move: 1)
+          expect{ move.save }.to_not change{ game.reload.won_by }
+
           move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 1)
+          expect{ move.save }.to_not change{ game.reload.won_by }
+
+          move = build(:move, game: game, player_number: 1, vertical_move: 'A', horizontal_move: 2)
           expect{ move.save }.to_not change{ game.reload.won_by }
 
           move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 2)
           expect{ move.save }.to_not change{ game.reload.won_by }
 
-          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 3)
-          expect{ move.save }.to_not change{ game.reload.won_by }
-
-          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 4)
-          expect{ move.save }.to_not change{ game.reload.won_by }
-
-          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 5)
-          expect{ move.save }.to change{ game.reload.won_by }.to 2
+          move = build(:move, game: game, player_number: 1, vertical_move: 'A', horizontal_move: 3)
+          expect{ move.save }.to change{ game.reload.won_by }.to 1
         end
       end
 
@@ -110,7 +109,7 @@ RSpec.describe Move, type: :model do
         let!(:placement_not_needed) { create :placement, ship: ship, game: game, player_number: 2,
                                              horizontal_placement: '1', vertical_placement: "A" }
         it 'sets hit if it hits' do
-          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 1)
+          move = build(:move, game: game, player_number: 1, vertical_move: 'A', horizontal_move: 1)
           expect{ move.save }.to change{ game.reload.started_at }
         end
       end

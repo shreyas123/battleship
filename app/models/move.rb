@@ -1,17 +1,17 @@
 require_relative './placement'
 
 class Move < ActiveRecord::Base
+
   belongs_to :game
 
   has_many :placements, through: :game
 
   validates :game_id, presence: true
   validates :player_number, inclusion: { in: [1,2] }, presence: true
-  validates :vertical_move, presence: true, inclusion: { in: Placement::VERTICAL_NAMES }, uniqueness: { scope: [:horizontal_move, :game_id] }
-  validates :horizontal_move, presence: true, inclusion: { in: Placement::HORIZONTAL_NAMES }, uniqueness: { scope: [:vertical_move, :game_id] }
+  validates :vertical_move, presence: true, inclusion: { in: Placement::VERTICAL_NAMES }, uniqueness: { scope: [:horizontal_move, :game_id, :player_number] }
+  validates :horizontal_move, presence: true, inclusion: { in: Placement::HORIZONTAL_NAMES }, uniqueness: { scope: [:vertical_move, :game_id, :player_number] }
 
-  validate :validate_placements
-  validate :validate_game_won
+  validate :validate_placements, :validate_game_won, :validate_move
 
   before_save :check_hit
   after_commit :set_won, :toggle_game_move
@@ -26,6 +26,12 @@ class Move < ActiveRecord::Base
     def validate_game_won
       if game && !game.won_by.nil?
         errors.add(:player_number, "Game is already won by player #{game.won_by}")
+      end
+    end
+
+    def validate_move
+      if game && game.move != self.player_number
+        errors.add(:player_number, "Its player #{game.move} turn")
       end
     end
 
