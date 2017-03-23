@@ -8,17 +8,21 @@ class Game < ActiveRecord::Base
 
   validates :player1_id, :player2_id, presence: true
 
-  before_create :set_started_at
-
   def serializable_hash(options = {})
     super(
         include: [:player1, :player2]
       )
   end
 
-  private
-    def set_started_at
-      self.started_at = Time.now
+  def set_won(current_player)
+    if Ship.sum(:length) == moves.where(player_number: current_player).count(:hit)
+      self.won_by = current_player
+      self.save
     end
+  end
 
+  def set_started_at
+    self.started_at = Time.now
+    self.save
+  end
 end

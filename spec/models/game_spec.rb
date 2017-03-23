@@ -22,16 +22,10 @@ RSpec.describe Game, type: :model do
     end
   end
 
-  describe 'callbacks' do
-    describe 'before_create' do
-      describe '#add_started_at' do
-        it 'adds started_at as current time' do
-          game = build(:game)
-          game.started_at = nil
-          game.save
-          expect( game.reload.started_at ).to_not be_nil
-        end
-      end
+  describe '#set_started_at' do
+    it 'adds started_at as current time' do
+      game = create(:game)
+      expect{ game.set_started_at }.to change{ game.started_at }
     end
   end
 end
