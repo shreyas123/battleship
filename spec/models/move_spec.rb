@@ -19,6 +19,24 @@ RSpec.describe Move, type: :model do
   end
 
   describe 'callbacks' do
+    describe "before_save" do
+      describe "check_hit" do
+        let(:game) { create :game }
+        let(:ship) { create :ship }
+        let!(:placement) { create :placement, ship: ship, game: game, player_number: 1,
+                                             horizontal_placement: '1', vertical_placement: "A" }
+        it 'sets hit if it hits' do
+          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 1)
+          expect{ move.save }.to change{ move.hit }.to true
+          move.destroy
 
+          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 2)
+          expect{ move.save }.to change{ move.hit }.to true
+
+          move = build(:move, game: game, player_number: 2, vertical_move: 'A', horizontal_move: 6)
+          expect{ move.save }.to_not change{ move.hit }
+        end
+      end
+    end
   end
 end
