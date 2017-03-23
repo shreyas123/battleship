@@ -33,7 +33,9 @@ ActiveRecord::Schema.define(version: 20170321192123) do
     t.integer "game_id"
     t.integer "ship_sunk_id"
     t.integer "player_number"
-    t.boolean "hit",           default: false
+    t.string  "vertical_move"
+    t.integer "horizontal_move"
+    t.boolean "hit",             default: false
     t.index ["game_id"], name: "index_moves_on_game_id", using: :btree
     t.index ["ship_sunk_id"], name: "index_moves_on_ship_sunk_id", using: :btree
   end
