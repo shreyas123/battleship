@@ -1,11 +1,11 @@
 language: ruby
 rvm:
- - 2.3.1
- - 2.3.0
+ - 2.3.3
 before_script:
   - cp config/database.yml.travis config/database.yml
 script:
  - RACK_ENV=test bundle exec rake db:create db:migrate
  - bundle exec rspec spec
+ - CODECLIMATE_REPO_TOKEN=e4907799ab9a861595f15f14f7ddd42e85513d2af036dfb6f2cadb45c36a8284 bundle exec codeclimate-test-reporter
 services:
   - postgresql
