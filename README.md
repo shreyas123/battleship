@@ -113,3 +113,4 @@ Please accept apologies and ofcourse I need to extend more
   - Investigate params permission
   - Check players before creating a game
   - Pausing and Resuming the game ( The schema is already added just needs changes on the validations of the "Move" model )
+  - Callback to increase the score with the (100 - number of moves) to the user and 10 points for win to have it on the leaderboard. 
